@@ -1,25 +1,25 @@
-import { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import './App.css';
 import Header from './components/AppHeader/AppHeader';
+import SearchBar from './components/SearchBar/SearchBar';
+import { fetchingGalleryPage } from './utils/gallery-api';
+import { useState } from 'react';
+import ImageGallery from './components/ImageGallery/ImageGallery';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [gallery, setGallery] = useState([]);
 
+  const handleSearch = async searchQuery => {
+    const response = await fetchingGalleryPage(searchQuery);
+
+    setGallery(response);
+  };
   return (
     <>
       <Header />
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount(count => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Toaster />
+      <SearchBar onSearch={handleSearch} />
+      <ImageGallery gallery={gallery} />
     </>
   );
 }
