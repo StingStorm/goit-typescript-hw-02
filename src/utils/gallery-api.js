@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function fetchingGalleryPage(userRequest) {
+export async function fetchingGalleryPage(userRequest, currentPage = 1) {
   const getConfig = {
     method: 'get',
     url: 'https://api.unsplash.com/search/photos',
@@ -9,12 +9,13 @@ export async function fetchingGalleryPage(userRequest) {
     },
     params: {
       query: userRequest,
-      page: 1,
+      page: currentPage,
       per_page: 20,
+      orientation: 'landscape',
     },
   };
 
   const response = await axios(getConfig);
 
-  return response.data.results;
+  return response.data;
 }
