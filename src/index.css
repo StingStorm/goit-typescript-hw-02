@@ -20,7 +20,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
 
-  padding-top: 55px;
+  padding: 55px 0;
 }
 
 h1,
