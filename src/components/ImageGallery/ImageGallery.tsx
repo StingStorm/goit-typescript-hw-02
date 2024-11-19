@@ -1,6 +1,12 @@
+import { GalleryItemType } from '../../App.types';
 import ImageCard from '../ImageCard/ImageCard';
 import css from './ImageGallery.module.css';
-const ImageGallery = ({ gallery, onOpenModal }) => {
+
+type Props = {
+  gallery: GalleryItemType[];
+  onOpenModal: (imgObj: GalleryItemType) => void;
+};
+const ImageGallery = ({ gallery, onOpenModal }: Props) => {
   return (
     <ul className={css.galleryList}>
       {gallery.map(item => {

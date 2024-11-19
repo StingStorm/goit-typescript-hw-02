@@ -5,13 +5,21 @@ import { FcLike } from 'react-icons/fc';
 import { FaComments } from 'react-icons/fa';
 import { BsFillImageFill } from 'react-icons/bs';
 import { RemoveScroll } from 'react-remove-scroll';
+import { GalleryItemType } from '../../App.types';
 
 Modal.setAppElement('#root');
 
-const ImageModal = ({ isOpenModal, onClose, modalContent }) => {
-  const getRandomCommentsNum = () => {
+type Props = {
+  isOpenModal: boolean;
+  onClose: () => void;
+  modalContent: GalleryItemType | null;
+};
+
+const ImageModal = ({ isOpenModal, onClose, modalContent }: Props) => {
+  const getRandomCommentsNum = (): number => {
     return Math.floor(Math.random() * 1200);
   };
+
   return (
     <RemoveScroll enabled={isOpenModal}>
       <Modal
@@ -23,7 +31,7 @@ const ImageModal = ({ isOpenModal, onClose, modalContent }) => {
           afterOpen: css.modalOverlayOpen,
           beforeClose: css.modalOverlayClose,
         }}
-        contentLabel={modalContent?.alt_description}
+        contentLabel={modalContent?.alt_description ?? '//Unknown//'}
         closeTimeoutMS={350}
       >
         <button type="button" className={css.modalBtn} onClick={onClose}>
@@ -31,7 +39,7 @@ const ImageModal = ({ isOpenModal, onClose, modalContent }) => {
         </button>
         <img
           src={modalContent?.urls?.regular}
-          alt={modalContent?.alt_description}
+          alt={modalContent?.alt_description ?? '//Unknown//'}
         />
         <div className={css.imageStats} tabIndex={1}>
           <span>

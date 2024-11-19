@@ -2,35 +2,36 @@ import toast, { Toaster } from 'react-hot-toast';
 import './App.css';
 import Header from './components/AppHeader/AppHeader';
 import SearchBar from './components/SearchBar/SearchBar';
-import { fetchingGalleryPage } from './utils/gallery-api';
+import { fetchingGalleryPage } from './services/gallery-api';
 import { useEffect, useState } from 'react';
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ImageModal from './components/ImageModal/ImageModal';
 import { ThreeCircles } from 'react-loader-spinner';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import { isAxiosError } from 'axios';
+import { GalleryItemType } from './App.types';
 
 function App() {
-  const [gallery, setGallery] = useState([]);
+  const [gallery, setGallery] = useState<GalleryItemType[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [modalContent, setModalContent] = useState({});
+  const [modalContent, setModalContent] = useState<GalleryItemType | null>(
+    null
+  );
 
   useEffect(() => {
-    //Should I use 'useCallback' for this func outside of useEffect?
-    const getGellery = async (query, pageNum) => {
+    const getGellery = async (query: string, pageNum: number) => {
       setIsLoading(true);
       setIsError(false);
 
       try {
-        const { results, total_pages: totalPages } = await fetchingGalleryPage(
-          query,
-          pageNum
-        );
+        const { results, total_pages: totalPages } =
+          await fetchingGalleryPage<GalleryItemType>(query, pageNum);
 
         if (currentPage === totalPages) {
           toast("Unfortunately you've reached the end of the gallery", {
@@ -52,7 +53,9 @@ function App() {
           throw new Error('No hits for this search query');
         }
       } catch (error) {
-        toast.error(error.message);
+        if (isAxiosError(error)) {
+          toast.error(error.message);
+        }
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -64,7 +67,7 @@ function App() {
     }
   }, [searchQuery, currentPage]);
 
-  const handleSearch = userQuery => {
+  const handleSearch = (userQuery: string) => {
     setGallery([]);
     setSearchQuery(userQuery);
     setCurrentPage(1);
@@ -76,13 +79,14 @@ function App() {
     });
   };
 
-  const onOpenModal = object => {
+  const onOpenModal = (imgObj: GalleryItemType) => {
     setIsOpenModal(true);
-    setModalContent(object);
+    setModalContent(imgObj);
   };
 
   const onCloseModal = () => {
     setIsOpenModal(false);
+    setModalContent(null);
   };
 
   return (
