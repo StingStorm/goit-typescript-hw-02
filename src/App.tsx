@@ -14,12 +14,12 @@ import { GalleryItemType } from './App.types';
 
 function App() {
   const [gallery, setGallery] = useState<GalleryItemType[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isLastPage, setIsLastPage] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<GalleryItemType | null>(
     null
   );
